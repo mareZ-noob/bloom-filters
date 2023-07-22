@@ -11,8 +11,11 @@
 #include <math.h>
 #include <algorithm>
 
-#include "bloom_filters.cpp"
-#include "func.cpp"
+#define ll long long
+#define SIZE 1000
+
+#include "bloom_filters.h"
+#include "func.h"
 
 using namespace std;
 
