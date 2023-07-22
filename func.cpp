@@ -1,9 +1,9 @@
 #include "func.h"
 
 // ghi ra tai khoan da tao thanh cong
-void signUpfile(string username, string password){
+void signUpfile(Account user){
     ofstream ofs("SignUp.txt", ios::app);
-    ofs << username << " " << password << endl;
+    ofs << user.username << " " << user.password << endl;
     ofs.close();
 }
 
@@ -90,18 +90,17 @@ void InvalidPassword() {
 
 bool isLogin(bool* bitarray){
     string tmp;
-    string username , password;
-    string un , pas ;
+    Account user;
 
     system("cls");
     cout << "2. Login" << endl;
     cout << "Enter your username: ";
-    cin >> username;
+    cin >> user.username;
     cout << "Enter your password: ";
-    cin >> password;
+    cin >> user.password;
 
     // chua kiem tra password
-    if(LookUp(bitarray,username)){
+    if(LookUp(bitarray,user.username)){
         return true;
     }
     else    
@@ -110,9 +109,8 @@ bool isLogin(bool* bitarray){
 
 void choice(bool* bitarray, int size){
     int ch;
-    string username , password;
     readFile(bitarray,size);
-
+    Account user;
     cout << "Main Menu: " << endl;
     cout << "----------------------" << endl;
     cout << "1. Register" << endl;
@@ -126,22 +124,22 @@ void choice(bool* bitarray, int size){
         system("cls");
         // signUp(bitarray,size, username,password);
         cout << "Enter your username: ";
-        cin >> username ;
-        while(!checkUsername(username,bitarray)){
+        cin >> user.username;
+        while(!checkUsername(user.username,bitarray)){
             InvaidUsername();
             cout << "Enter your username: ";
-            cin >> username;
+            cin >> user.username;
         }
         cout << "Enter your password: ";
-        cin >> password;
-        while(!checkPassword(username,password)){
+        cin >> user.password;
+        while(!checkPassword(user.username,user.password)){
             system("cls");
             InvalidPassword();
             cout << "Enter you password: ";
-            cin >> password;
+            cin >> user.password;
         }
-        Insert(bitarray,username);
-        signUpfile(username, password);
+        Insert(bitarray,user.username);
+        signUpfile(user);
         system("cls");
         cout << "2. Login" << endl;
         if(isLogin(bitarray)){
