@@ -1,4 +1,4 @@
-#include "bloom_filters.h"
+#include "main.h"
 using namespace std;
 
 ll int hash1(string s) {
@@ -65,6 +65,20 @@ void Insert(bool *bitArray, string s) {
         bitArray[c] = true;
         bitArray[d] = true;
     }
+}
+
+int hashPassword(string s)
+{
+    ll hash = hash1(s) * pow(257.0, 4.0); 
+    hash = hash % SIZE; 
+    hash += hash2(s) * pow(257, 3); 
+    hash = hash % SIZE; 
+    hash += hash3(s) * pow(257, 2);
+    hash = hash % SIZE;  
+    hash += hash4(s) * 257;
+    hash = hash % SIZE; 
+
+    return hash;
 }
 
 // int main() {

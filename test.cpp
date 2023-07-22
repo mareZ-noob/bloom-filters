@@ -1,7 +1,7 @@
 // #include <bits/stdc++.h>
 // using namespace std;
 
-#include "main.h"
+#include "func.cpp"
 
 // bool checkUsername(string username) {
 //     int n = username.length();
@@ -14,8 +14,7 @@
 // }
 
 int main() {
-    int size = 100;
-    bool bitarray[100] = {false};
-    choice(bitarray,100);
+    Arrays arrays;
+    choice(arrays,100);
     return 0;
 }

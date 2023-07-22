@@ -19,6 +19,12 @@
 
 using namespace std;
 
+struct Arrays {
+    bool bitarray[SIZE];
+    bool bitarrayPass[SIZE][SIZE];
+    bool bitarrayWeak[SIZE];
+};
+
 struct Account {
     string username;
     string password;
