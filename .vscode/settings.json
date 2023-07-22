@@ -1,5 +1,6 @@
 {
     "files.associations": {
+        "*.py": "python",
         "string": "cpp",
         "bitset": "cpp",
         "vector": "cpp",
@@ -8,6 +9,9 @@
         "string_view": "cpp",
         "system_error": "cpp",
         "typeindex": "cpp",
-        "variant": "cpp"
-    }
+        "variant": "cpp",
+        "xstring": "cpp",
+        "iostream": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "disabled"
 }
