@@ -15,6 +15,6 @@
 
 int main() {
     Arrays arrays;
-    choice(arrays,100);
+    choice(arrays);
     return 0;
 }

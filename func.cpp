@@ -15,7 +15,7 @@ void failFile(Arrays &arrays, Account user){
 }
 
 // doc file nguoi dung de tao bitarray
-void readFile(Arrays &arrays, int size){
+void readFile(Arrays &arrays){
     string data,tmp;
     string username;
     ifstream ifs("SignUp.txt");
@@ -104,30 +104,11 @@ void InvalidPassword() {
          << endl;
 }
 
-// void changePassword(Account &user){
-//     string data;
-//     cout << "Enter your new password: ";
-//     cin >> user.password;
-//     ofstream ofs("SignUp.txt");
-//     ifstream ifs("SignUp.txt");
-//     while(!ifs.eof()){
-//         getline(ifs, data, ' ');
-//         if(data.empty())
-//             break;
-//         if(data == user.username){
-//             ofs = ifs;
-//             ofs << user.password;
-//         }
-//     }
-//     ifs.close();
-//     ofs.close();
-// }
+bool isLogin(Account &user, Arrays &arrays, int &check){
+    Account tmp;
 
-bool isLogin(Arrays &arrays, int &check){
-    Account user, tmp;
-
-    system("cls");
-    cout << "2. Login" << endl;
+    // system("cls");
+    // cout << "2. Login" << endl;
     cout << "Enter your username: ";
     cin >> user.username;
     cout << "Enter your password: ";
@@ -148,7 +129,9 @@ bool isLogin(Arrays &arrays, int &check){
     return false;
 }
 
-bool checkRegister(Arrays arrays, Account user){
+bool checkRegister(Arrays arrays, Account user, int &check){
+    if(!checkUsername(user.username,arrays)) check = 1;
+    else if(!checkPassword(user.username,user.password,arrays)) check = 2;
     if(checkPassword(user.username, user.password, arrays) && checkUsername(user.username, arrays)){
         cout << "Login successfully";
         return true;
@@ -157,9 +140,59 @@ bool checkRegister(Arrays arrays, Account user){
         return false;
 }
 
-void choice(Arrays &arrays, int size){
+void changePassWord(Account user, Arrays &arrays){
+    vector<Account> list;
+    Account tmp;
+    string data;
+
+    ifstream ifs("SignUp.txt");
+    while(!ifs.eof()){
+        getline(ifs,data);
+        if(data.empty())
+            break;
+        stringstream ss(data);
+        getline(ss,tmp.username, ' ');
+        getline(ss,tmp.password);
+        list.push_back(tmp);
+    }
+
+    ifs.close();
+
+    int index = 0;
+
+    for( ; index < list.size(); index++){
+        if(list[index].username == user.username)
+            break;
+    }
+
+    cout << "Enter your new password: ";
+    cin >> tmp.password;
+
+    while(!checkPassword(list[index].username, tmp.password, arrays)){
+        InvalidPassword();
+        cout << endl << "Enter your new password: ";
+        cin >> tmp.password;
+    }
+
+    list[index].password = tmp.password;
+
+    cout << "Your password has been changed successfully! ";
+
+    ofstream ofs("SignUp.txt");
+    for(int i = 0 ; i < list.size() ; i++){
+        ofs << list[i].username << " " << list[i].password << endl;
+    }
+    ofs.close();
+
+    memset(arrays.bitarray, 0, SIZE);
+    memset(arrays.bitarrayPass, 0, SIZE*SIZE);
+
+    readFile(arrays);
+}
+
+void choice(Arrays &arrays){
     int ch;
-    readFile(arrays, size);
+    readFile(arrays);
     Account user;
     cout << "Main Menu: " << endl;
     cout << "----------------------" << endl;
@@ -172,28 +205,34 @@ void choice(Arrays &arrays, int size){
 
     if(ch == 1){
         system("cls");
-        // signUp(bitarray,size, username,password);
+
         bool flag = true;
-        
+        int check;
         while(flag){
             cout << "Enter your username: ";
             cin >> user.username;
             cout << "Enter your password: ";
             cin >> user.password;
-            if(checkRegister(arrays, user))
+            if(checkRegister(arrays, user,check))
                 flag = false;
-            else    
+            else{
                 failFile(arrays, user);
+                if(check == 1)
+                    InvaidUsername();
+                if(check == 2)
+                    InvalidPassword();
+                cout << endl << endl;
+            }
         }
 
         Insert(arrays.bitarray,user.username);
         Insert(arrays.bitarrayPass[hashPassword(user.username)], user.password);
         signUpfile(user);
-        
+
         system("cls");
         cout << "2. Login" << endl;
-        int check;
-        while (!isLogin(arrays, check))
+
+        while (!isLogin(user,arrays, check))
         {
             cout << "Login fail!" << endl;
             if(check == 1)
@@ -202,13 +241,14 @@ void choice(Arrays &arrays, int size){
                 cout << "Invalid account!" << endl;
         }
         system("cls");
-        cout << "You can change your password!";
-        
+        cout << "You can change your password!" << endl;
+        changePassWord(user,arrays);
     }
     else {
         system("cls");
+        cout << "2. Login" << endl;
         int check;
-        while (!isLogin(arrays, check))
+        while (!isLogin(user, arrays, check))
         {
             cout << "Login fail!" << endl;
             if(check == 1)
@@ -217,6 +257,7 @@ void choice(Arrays &arrays, int size){
                 cout << "Invalid account!" << endl;
         }
         system("cls");
-        cout << "You can change your password!";        
+        cout << "You can change your password!" << endl;   
+        changePassWord(user,arrays);     
     }
 }

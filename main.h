@@ -20,9 +20,9 @@
 using namespace std;
 
 struct Arrays {
-    bool bitarray[SIZE];
-    bool bitarrayPass[SIZE][SIZE];
-    bool bitarrayWeak[SIZE];
+    bool bitarray[SIZE] = {false};
+    bool bitarrayPass[SIZE][SIZE] = {false};
+    bool bitarrayWeak[SIZE] = {false};
 };
 
 struct Account {
