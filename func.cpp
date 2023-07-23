@@ -5,6 +5,7 @@ void signUpfile(Account user){
     ofstream ofs("SignUp.txt", ios::app);
     ofs << user.username << " " << user.password << endl;
     ofs.close();
+    return;
 }
 
 // ghi ra tai khoan tao bi loi
@@ -12,6 +13,7 @@ void failFile(Account user){
     ofstream ofs("Fail.txt", ios::app);
     ofs << user.username << " " << user.password << endl;
     ofs.close();
+    return;
 }
 
 // doc file nguoi dung de tao bitarray
@@ -31,8 +33,10 @@ void readFile(Arrays &arrays){
         Insert(arrays.bitarrayPass[hashPassword(username)], tmp);
     }
     ifs.close();
+    return;
 }
 
+// doc file mk yeu vao bitarray
 void readWeakPass(Arrays &arrays){
     string data;
     ifstream ifs("WeakPass.txt");
@@ -43,8 +47,11 @@ void readWeakPass(Arrays &arrays){
         if(!LookUp(arrays.bitarrayWeak,data))
             Insert(arrays.bitarrayWeak,data);
     }
+    ifs.close();
+    return;
 }
 
+// kiem tra ten hop le
 bool checkUsername(string username, Arrays &arrays) {
     int n = username.length();
     for (auto x : username) {
@@ -56,6 +63,7 @@ bool checkUsername(string username, Arrays &arrays) {
     return true;
 }
 
+// in ra man hinh nhung dieu kien cua mot ten hop le
 void InvaidUsername() {
     cout << "Your username is invalid. Note that:" << endl;
     cout << "\t- 5 < sizeof(Username) < 10." << endl;
@@ -64,6 +72,7 @@ void InvaidUsername() {
          << endl;
 }
 
+// kiem tra password hop le
 bool checkPassword(string username, string password, Arrays &arrays) {
     if(LookUp(arrays.bitarrayWeak, password))
         return false;
@@ -90,6 +99,7 @@ bool checkPassword(string username, string password, Arrays &arrays) {
     return true;
 }
 
+// in ra man hinh dieu kien password hop le
 void InvalidPassword() {
     cout << "Your password is invalid. Note that: " << endl;
     cout << "\t- 10 < sizeof(Password) < 20." << endl;
@@ -104,31 +114,28 @@ void InvalidPassword() {
          << endl;
 }
 
+// kiem tra dang nhap
 bool isLogin(Account &user, Arrays &arrays, int &check){
     Account tmp;
 
-    // system("cls");
-    // cout << "2. Login" << endl;
     cout << "Enter your username: ";
-    cin >> user.username;
+    cin >> tmp.username;
     cout << "Enter your password: ";
-    cin >> user.password;
+    cin >> tmp.password;
     check = 0;
 
-    ifstream ifs("SignUp.txt");
-    while(!ifs.eof()){
-        getline(ifs,tmp.username,' ');
-        getline(ifs,tmp.password);
-        if(tmp.username == user.username && tmp.password == user.password){
-            cout << "Logged in successfully!" << endl;
-            return true;
-        }
-        if(tmp.username == user.username)
-            check = 1;
+    bool uSer = LookUp(arrays.bitarray,tmp.username);
+    bool pass = LookUp(arrays.bitarrayPass[hashPassword(tmp.username)], tmp.password);
+    if(uSer && pass)
+        return true;
+    else if(uSer && !pass){
+        check = 1;
     }
+
     return false;
 }
 
+// kiem tra dang ky
 bool checkRegister(Arrays arrays, Account user, int &check){
     if(!checkUsername(user.username,arrays)) check = 1;
     else if(!checkPassword(user.username,user.password,arrays)) check = 2;
@@ -140,6 +147,7 @@ bool checkRegister(Arrays arrays, Account user, int &check){
         return false;
 }
 
+// thay doi mat khau va ghi ra file mk moi
 void changePassWord(Account user, Arrays &arrays){
     vector<Account> list;
     Account tmp;
@@ -191,7 +199,8 @@ void changePassWord(Account user, Arrays &arrays){
     readFile(arrays);
 }
 
-void changePass(Account user, Arrays &arrays){
+// khi nguoi dung chon lua chon thay doi mat khau
+void changePassChoice(Account user, Arrays &arrays){
     int choice;
     system("cls");
     cout << "Logged in successfully!" << endl;
@@ -213,7 +222,52 @@ void changePass(Account user, Arrays &arrays){
     }
 }
 
+// khi nguoi dung chon dang ki
+void reGister(Arrays &arrays, Account &user, int &check){
+    system("cls");
+    cout << "1. Register" << endl << endl;
+    bool flag = true;
+    check = 0;
+    while(flag){
+        cout << "Enter your username: ";
+        cin >> user.username;
+        cout << "Enter your password: ";
+        cin >> user.password;
+        if(checkRegister(arrays, user,check))
+            return;
+        else{
+            failFile(user);
+            if(check == 1 && LookUp(arrays.bitarray,user.username)){ // kiem tra xem nguoi dung co muon quay lai trang dang nhap ko
+                system("cls");
+                cout << "Account already exists!" << endl << endl;
+                cout << "Do you want to back to main menu ?" << endl;
+                cout << "Press '1' to back to main menu or '3' to continue." << endl << endl;
+                cout << "Your choice: ";
+                cin >> check;
+                if(check == 1)
+                    return;
+            }
+            if(check == 1) // Ten sai dieu kien
+                InvaidUsername();
+            if(check == 2){ // Mat khau sai dieu kien
+                InvalidPassword();
+            }
+            if(check == 3){ // Neu nguoi dung chon tiep tuc dang ky tai khoan
+                system("cls");
+                cout << "1. Register" ;
+            }
+            cout << endl << endl;
+        }
+    }
+}
+
+// main menu
 void choice(Arrays &arrays){
+    
+    memset(arrays.bitarray, 0, SIZE);
+    memset(arrays.bitarrayPass, 0, SIZE*SIZE);
+    memset(arrays.bitarrayWeak, 0, SIZE);
+    
     int ch;
     readWeakPass(arrays);
     readFile(arrays);
@@ -225,46 +279,33 @@ void choice(Arrays &arrays){
     cout << endl;
     cout << "Your choice: ";
     cin >> ch;
-    cin.ignore();
 
     if(ch == 1){
-        system("cls");
-        cout << "1. Register" << endl << endl;
-        bool flag = true;
-        int check;
-        while(flag){
-            cout << "Enter your username: ";
-            cin >> user.username;
-            cout << "Enter your password: ";
-            cin >> user.password;
-            if(checkRegister(arrays, user,check))
-                flag = false;
-            else{
-                failFile(user);
+        int check = 0;
+        reGister(arrays, user, check);
+
+        if(check == 1){
+            system("cls");
+            choice(arrays);
+        }
+        else{
+            Insert(arrays.bitarray,user.username);
+            Insert(arrays.bitarrayPass[hashPassword(user.username)], user.password);
+            signUpfile(user);
+
+            system("cls");
+            cout << "2. Login" << endl << endl;
+
+            while (!isLogin(user,arrays, check))
+            {
+                cout << "Login fail!" << endl;
                 if(check == 1)
-                    InvaidUsername();
-                if(check == 2)
-                    InvalidPassword();
-                cout << endl << endl;
+                    cout << "Wrong password!" << endl << endl;
+                else 
+                    cout << "Invalid account!" << endl << endl;
             }
+            changePassChoice(user, arrays);
         }
-
-        Insert(arrays.bitarray,user.username);
-        Insert(arrays.bitarrayPass[hashPassword(user.username)], user.password);
-        signUpfile(user);
-
-        system("cls");
-        cout << "2. Login" << endl << endl;
-
-        while (!isLogin(user,arrays, check))
-        {
-            cout << "Login fail!" << endl;
-            if(check == 1)
-                cout << "Wrong password!" << endl << endl;
-            else 
-                cout << "Invalid account!" << endl << endl;
-        }
-        changePass(user, arrays);
     }
     else {
         system("cls");
@@ -275,9 +316,27 @@ void choice(Arrays &arrays){
             cout << "Login fail!" << endl;
             if(check == 1)
                 cout << "Wrong password!" << endl << endl;
-            else 
+            else {
+                system("cls");
+                cout << "Login fail!" << endl;
                 cout << "Invalid account!" << endl << endl;
-        }   
-        changePass(user, arrays);
+                cout << "Do you want to create a new account? " << endl;
+                cout << "Press '2' to back to main menu or '3' to continue ." << endl << endl;
+                cout << "Your choice: ";
+                cin >> check;
+            }
+            if(check == 2)
+                break;
+            else if(check == 3){
+                cout << "2. Login" << endl << endl;
+                system("cls");
+            }
+        }
+        if(check == 2){
+            system("cls");
+            choice(arrays);
+        }
+        else
+            changePassChoice(user, arrays);
     }
 }

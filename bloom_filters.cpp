@@ -67,18 +67,26 @@ void Insert(bool *bitArray, string s) {
     }
 }
 
-int hashPassword(string s)
-{
-    ll hash = hash1(s) * pow(257.0, 4.0); 
-    hash = hash % SIZE; 
-    hash += hash2(s) * pow(257, 3); 
-    hash = hash % SIZE; 
-    hash += hash3(s) * pow(257, 2);
-    hash = hash % SIZE;  
-    hash += hash4(s) * 257;
-    hash = hash % SIZE; 
+ll int doubleHash(int hash1, int hash2, int i) {
+    return (hash1 + i * hash2) % SIZE;
+}
 
-    return hash;
+ll int hashPassword(string s) {
+    ll int hash = 0;
+
+    for (int i = 0; i < 4; i++) {
+        int h1 = hash1(s);
+        int h2 = hash2(s);
+        hash += doubleHash(h1, h2, i);
+    }
+
+    for (int i = 0; i < 4; i++) {
+        int h3 = hash3(s);
+        int h4 = hash4(s);
+        hash += doubleHash(h3, h4, i);
+    }
+
+    return hash % SIZE;
 }
 
 // int main() {
