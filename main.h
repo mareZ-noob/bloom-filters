@@ -12,7 +12,7 @@
 #include <algorithm>
 
 #define ll long long
-#define SIZE 100
+#define SIZE 500
 
 #include "bloom_filters.h"
 #include "func.h"

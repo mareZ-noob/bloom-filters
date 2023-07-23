@@ -8,7 +8,7 @@ void signUpfile(Account user){
 }
 
 // ghi ra tai khoan tao bi loi
-void failFile(Arrays &arrays, Account user){
+void failFile(Account user){
     ofstream ofs("Fail.txt", ios::app);
     ofs << user.username << " " << user.password << endl;
     ofs.close();
@@ -169,6 +169,7 @@ void changePassWord(Account user, Arrays &arrays){
     cin >> tmp.password;
 
     while(!checkPassword(list[index].username, tmp.password, arrays)){
+        failFile(user);
         InvalidPassword();
         cout << endl << "Enter your new password: ";
         cin >> tmp.password;
@@ -190,6 +191,28 @@ void changePassWord(Account user, Arrays &arrays){
     readFile(arrays);
 }
 
+void changePass(Account user, Arrays &arrays){
+    int choice;
+    system("cls");
+    cout << "Logged in successfully!" << endl;
+    cout << "Menu: " << endl;
+    cout << "----------------------" << endl;
+    cout << "1. Change password" << endl;
+    cout << "0. Quit" << endl;
+    cout << "Your choice: ";
+    cin >> choice ;
+    if(choice == 0){
+        system("cls");
+        cout << "You exited the program!";
+        return;
+    }
+    else{
+        system("cls");
+        cout << "1. Change password" << endl << endl;
+        changePassWord(user,arrays);
+    }
+}
+
 void choice(Arrays &arrays){
     int ch;
     readWeakPass(arrays);
@@ -206,7 +229,7 @@ void choice(Arrays &arrays){
 
     if(ch == 1){
         system("cls");
-
+        cout << "1. Register" << endl << endl;
         bool flag = true;
         int check;
         while(flag){
@@ -217,7 +240,7 @@ void choice(Arrays &arrays){
             if(checkRegister(arrays, user,check))
                 flag = false;
             else{
-                failFile(arrays, user);
+                failFile(user);
                 if(check == 1)
                     InvaidUsername();
                 if(check == 2)
@@ -231,34 +254,30 @@ void choice(Arrays &arrays){
         signUpfile(user);
 
         system("cls");
-        cout << "2. Login" << endl;
+        cout << "2. Login" << endl << endl;
 
         while (!isLogin(user,arrays, check))
         {
             cout << "Login fail!" << endl;
             if(check == 1)
-                cout << "Wrong password!" << endl;
+                cout << "Wrong password!" << endl << endl;
             else 
-                cout << "Invalid account!" << endl;
+                cout << "Invalid account!" << endl << endl;
         }
-        system("cls");
-        cout << "You can change your password!" << endl;
-        changePassWord(user,arrays);
+        changePass(user, arrays);
     }
     else {
         system("cls");
-        cout << "2. Login" << endl;
+        cout << "2. Login" << endl << endl;
         int check;
         while (!isLogin(user, arrays, check))
         {
             cout << "Login fail!" << endl;
             if(check == 1)
-                cout << "Wrong password!" << endl;
+                cout << "Wrong password!" << endl << endl;
             else 
-                cout << "Invalid account!" << endl;
-        }
-        system("cls");
-        cout << "You can change your password!" << endl;   
-        changePassWord(user,arrays);     
+                cout << "Invalid account!" << endl << endl;
+        }   
+        changePass(user, arrays);
     }
 }
