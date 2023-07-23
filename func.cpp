@@ -192,6 +192,7 @@ void changePassWord(Account user, Arrays &arrays){
 
 void choice(Arrays &arrays){
     int ch;
+    readWeakPass(arrays);
     readFile(arrays);
     Account user;
     cout << "Main Menu: " << endl;
