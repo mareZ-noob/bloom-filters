@@ -1,5 +1,5 @@
-#ifndef _MAIN_H_
-#define _MAIN_H_
+#ifndef __MAIN_H_
+#define __MAIN_H_
 
 #include <iostream>
 #include <string>
@@ -11,23 +11,8 @@
 #include <math.h>
 #include <algorithm>
 
-#define ll long long
-#define SIZE 1009
-
-#include "bloom_filters.h"
-#include "func.h"
-
 using namespace std;
 
-struct Arrays {
-    bool bitarray[SIZE] = {false};
-    bool bitarrayPass[SIZE][SIZE] = {false};
-    bool bitarrayWeak[SIZE] = {false};
-};
+#define SIZE 1009
 
-struct Account {
-    string username;
-    string password;
-};
-
-#endif  // _MAIN_H
+#endif  // __MAIN_H

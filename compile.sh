@@ -1,1 +1,1 @@
-g++ main.cpp func.cpp bloom_filters.cpp -o main.exe
+g++ -Wall main.cpp func.cpp bloom_filters.cpp -o main.exe

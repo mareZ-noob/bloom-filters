@@ -1,19 +1,36 @@
-// #ifndef _FUNC_H_
-// #define _FUNC_H_
+#ifndef __FUNC_H_
+#define __FUNC_H_
 
-// #include "main.h"
-// using namespace std;
+#include "main.h"
+#include "bloom_filters.h"
 
-// void choice(Arrays &arrays, int size);
-// bool isLogin(bool*);
-// void readFile(bool* bitarray, int size);
-// void failFile(string username);
-// void signUpfile(string username, string password);
-// bool checkUsername(string username, Arrays &arrays);
-// void InvaidUsername();
-// bool checkPassword(string username, string password, Arrays &arrays);
-// void InvalidPassword();
-// void readWeakPass(Arrays &arrays);
-// bool checkRegister(Arrays arrays, Account user);
+struct Arrays {
+    bool bitArray[SIZE] = {false};
+    bool bitArrayPass[SIZE][SIZE] = {false};
+    bool bitArrayWeak[SIZE] = {false};
+};
 
-// #endif  // _FUNC_H
+struct Account {
+    string username;
+    string password;
+};
+
+void signUpfile(Account user);
+void failFile(Account user);
+
+void readFile(Arrays &arrays);
+void readWeakPass(Arrays &arrays);
+
+bool checkUsername(string username, Arrays &arrays);
+void InvaidUsername();
+bool checkPassword(string username, string password, Arrays &arrays);
+void InvalidPassword();
+
+bool isLogin(Account &user, Arrays &arrays, int &check);
+bool checkRegister(Arrays arrays, Account user, int &check);
+void changePassWord(Account &user, Arrays &arrays);
+void changePassChoice(Account &user, Arrays &arrays);
+void reGister(Arrays &arrays, Account &user, int &check);
+void choice(Arrays &arrays);
+
+#endif  // __FUNC_H
