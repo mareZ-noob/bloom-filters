@@ -1,3 +1,7 @@
-#include "main.h"
+#include "func.h"
 
-int main() { return 0; }
+int main() {
+    Arrays arrays;
+    choice(arrays);
+    return 0;
+}

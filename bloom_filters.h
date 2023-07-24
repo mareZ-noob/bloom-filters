@@ -1,17 +1,18 @@
-// #ifndef _BLOOM_FILTERS_H_
-// #define _BLOOM_FILTERS_H_
+#ifndef __BLOOM_FILTERS_H_
+#define __BLOOM_FILTERS_H_
 
-// #include "main.h"
-// using namespace std;
+#include "main.h"
 
-// // Hash
-// ll int hash1(string s);
-// ll int hash2(string s);
-// ll int hash3(string s);
-// ll int hash4(string s);
+// Hash
+long long hash1(string s);
+long long hash2(string s);
+long long hash3(string s);
+long long hash4(string s);
+long long doubleHash(int hash1, int hash2, int i);
+long long hashPassword(string s);
 
-// bool LookUp(bool *bitArray, string s);
-// void Insert(bool *bitArray, string s);
-// int hashPassword(string s);
+// Method
+bool LookUp(bool *bitArray, string s);
+void Insert(bool *bitArray, string s);
 
-// #endif  // _BLOOM_FILTERS_H
+#endif  // __BLOOM_FILTERS_H

@@ -1,78 +1,48 @@
-#include "main.h"
-using namespace std;
+#include "bloom_filters.h"
 
-ll int hash1(string s) {
-    ll int hash = 0;
-    for (int i = 0; i < s.size(); i++) {
+long long hash1(string s) {
+    long long hash = 0;
+    for (long unsigned int i = 0; i < s.size(); i++) {
         hash = (hash + ((int)s[i]));
         hash = hash % SIZE;
     }
     return hash;
 }
 
-ll int hash2(string s) {
-    ll int hash = 1;
-    for (int i = 0; i < s.size(); i++) {
+long long hash2(string s) {
+    long long hash = 1;
+    for (long unsigned int i = 0; i < s.size(); i++) {
         hash = hash + pow(19, i) * s[i];
-        // hash = hash * 19 + s[i];
         hash = hash % SIZE;
     }
     return hash % SIZE;
 }
 
-ll int hash3(string s) {
-    ll int hash = 7;
-    for (int i = 0; i < s.size(); i++) {
+long long hash3(string s) {
+    long long hash = 7;
+    for (long unsigned int i = 0; i < s.size(); i++) {
         hash = (hash * 31 + s[i]) % SIZE;
     }
 
     return hash % SIZE;
 }
 
-ll int hash4(string s) {
-    ll int hash = 3;
+long long hash4(string s) {
+    long long hash = 3;
     int p = 7;
-    for (int i = 0; i < s.size(); i++) {
+    for (long unsigned int i = 0; i < s.size(); i++) {
         hash += hash * 7 + s[i] * pow(p, i);
         hash = hash % SIZE;
     }
     return hash;
 }
 
-bool LookUp(bool *bitArray, string s) {
-    int a = hash1(s);
-    int b = hash2(s);
-    int c = hash3(s);
-    int d = hash4(s);
-
-    if (bitArray[a] && bitArray[b] && bitArray[c] && bitArray[d])
-        return true;
-    else
-        return false;
-}
-
-void Insert(bool *bitArray, string s) {
-    if (LookUp(bitArray, s)) {
-        cout << s << " is Probably already present" << endl;
-    } else {
-        int a = hash1(s);
-        int b = hash2(s);
-        int c = hash3(s);
-        int d = hash4(s);
-
-        bitArray[a] = true;
-        bitArray[b] = true;
-        bitArray[c] = true;
-        bitArray[d] = true;
-    }
-}
-
-ll int doubleHash(int hash1, int hash2, int i) {
+long long doubleHash(int hash1, int hash2, int i) {
     return (hash1 + i * hash2) % SIZE;
 }
 
-ll int hashPassword(string s) {
-    ll int hash = 0;
+long long hashPassword(string s) {
+    long long hash = 0;
 
     for (int i = 0; i < 4; i++) {
         int h1 = hash1(s);
@@ -89,26 +59,30 @@ ll int hashPassword(string s) {
     return hash % SIZE;
 }
 
-// int main() {
-//     bool bitArray[100] = {false};
-//     int size = 100;
-//     string strArr[33] = {
-//         "abound",   "abounds",       "abundance",  "abundant", "accessable",
-//         "bloom",    "blossom",       "bolster",    "bonny",    "bonus",
-//         "bonuses",  "coherent",      "cohesive",   "colorful", "comely",
-//         "comfort",  "gems",          "generosity", "generous", "generously",
-//         "genial",   "bluff",         "cheater",    "hate",     "war",
-//         "humanity", "racism",        "hurt",       "nuke",     "gloomy",
-//         "facebook", "geeksforgeeks", "twitter"};
-//     for (auto s : strArr) insert(bitArray, s);
+bool LookUp(bool *bitArray, string s) {
+    int a = hash1(s);
+    int b = hash2(s);
+    int c = hash3(s);
+    int d = hash4(s);
 
-//     bool found = lookup(bitArray, "Comely1");
-//     bool notFound = lookup(bitArray, "comely");
+    if (bitArray[a] && bitArray[b] && bitArray[c] && bitArray[d])
+        return true;
+    else
+        return false;
+}
 
-//     cout << found << endl;
-//     cout << notFound << endl;
+void Insert(bool *bitArray, string s) {
+    if (LookUp(bitArray, s)) {
+        cout << s << " is Probably already present\n";
+    } else {
+        int a = hash1(s);
+        int b = hash2(s);
+        int c = hash3(s);
+        int d = hash4(s);
 
-//     return 0;
-//     cout << 1 + 3;
-//     return 0;
-// }
+        bitArray[a] = true;
+        bitArray[b] = true;
+        bitArray[c] = true;
+        bitArray[d] = true;
+    }
+}
