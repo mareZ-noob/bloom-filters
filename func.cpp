@@ -117,8 +117,7 @@ bool isLogin(Account &user, Arrays &arrays, int &check) {
     check = 0;
 
     bool uSer = LookUp(arrays.bitArray, user.username);
-    bool pass =
-        LookUp(arrays.bitArrayPass[hashPassword(user.username)], user.password);
+    bool pass = LookUp(arrays.bitArrayPass[hashPassword(user.username)], user.password);
     if (uSer && pass) {
         return true;
     } else if (uSer && !pass) {
@@ -136,7 +135,7 @@ bool checkRegister(Arrays arrays, Account user, int &check) {
         check = 2;
     if (checkPassword(user.username, user.password, arrays) &&
         checkUsername(user.username, arrays)) {
-        cout << "Login successfully\n\n";
+        // cout << "Login successfully\n\n";
         return true;
     } else
         return false;
@@ -199,7 +198,7 @@ void changePassChoice(Account &user, Arrays &arrays) {
     cout << "Menu: \n";
     cout << "----------------------\n";
     cout << "1. Change password\n";
-    cout << "0. Quit\n";
+    cout << "0. Back to main menu\n";
     cout << "Your choice: ";
     cin >> choice;
     if (choice == 0) {
@@ -233,6 +232,7 @@ void reGister(Arrays &arrays, Account &user, int &check) {
                     << "Press '1' to back to main menu or '3' to continue.\n\n";
                 cout << "Your choice: ";
                 cin >> check;
+                cout << "\n----------------------\n";
                 if (check == 1) return;
             }
             if (check == 0)  // Invalid username
@@ -250,6 +250,7 @@ void reGister(Arrays &arrays, Account &user, int &check) {
 
 // Main menu
 void choice(Arrays &arrays) {
+
     memset(arrays.bitArray, 0, SIZE);
     memset(arrays.bitArrayPass, 0, SIZE * SIZE);
     memset(arrays.bitArrayWeak, 0, SIZE);
@@ -258,14 +259,21 @@ void choice(Arrays &arrays) {
     readWeakPass(arrays);
     readFile(arrays);
     Account user;
+
     cout << "Main Menu: \n";
     cout << "----------------------\n";
     cout << "1. Register\n";
-    cout << "2. Login\n\n";
+    cout << "2. Login\n";
+    cout << "0. Exit\n\n";
     cout << "Your choice: ";
     cin >> ch;
+    cout << "\n----------------------\n";
 
-    if (ch == 1) {
+    if(ch == 0){
+        cout << "You exited the program!";
+        return;
+    }
+    else if (ch == 1) {
         int check = 0;
         reGister(arrays, user, check);
 
@@ -277,16 +285,18 @@ void choice(Arrays &arrays) {
                    user.password);
             signUpfile(user);
 
-            cout << "2. Login\n\n";
-
-            while (!isLogin(user, arrays, check)) {
-                cerr << "Login fail!\n";
-                if (check == 1)
-                    cerr << "Wrong password!\n\n";
-                else
-                    cerr << "Invalid account!\n\n";
+            int userChoice;
+            cout << "Signed up successfully! \n";
+            cout << "Press '1' to back to main menu or '0' to exit the program \n";
+            cout << "Your choice: ";
+            cin >> userChoice;
+            cout << "\n----------------------\n";
+            if(userChoice == 1)
+                choice(arrays);
+            else{
+                cout << "You exited the program! ";
+                return;
             }
-            changePassChoice(user, arrays);
         }
     } else {
         cout << "2. Login\n\n";
@@ -296,24 +306,27 @@ void choice(Arrays &arrays) {
             if (check == 1)
                 cerr << "Wrong password!\n\n";
             else {
-                cerr << "Login fail!\n";
                 cerr << "Invalid account!\n\n";
                 cout << "Do you want to create a new account? \n";
                 cout << "Press '2' to back to main menu or '3' to continue "
                         ".\n\n";
                 cout << "Your choice: ";
                 cin >> check;
+                cout << "\n----------------------\n";
             }
             if (check == 2)
                 break;
             else if (check == 3) {
                 cout << "2. Login\n\n";
+                continue;
             }
         }
         if (check == 2) {
             choice(arrays);
         } else {
             changePassChoice(user, arrays);
+            cout << "\n----------------------\n";
+            choice(arrays);
         }
     }
 }
