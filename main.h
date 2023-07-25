@@ -1,15 +1,16 @@
 #ifndef __MAIN_H_
 #define __MAIN_H_
 
-#include <iostream>
-#include <string>
-#include <string.h>
-#include <cstring>
-#include <sstream>
-#include <vector>
-#include <fstream>
 #include <math.h>
+#include <string.h>
+
 #include <algorithm>
+#include <cstring>
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
 
 using namespace std;
 

@@ -1,8 +1,8 @@
 #ifndef __FUNC_H_
 #define __FUNC_H_
 
-#include "main.h"
 #include "bloom_filters.h"
+#include "main.h"
 
 struct Arrays {
     bool bitArray[SIZE] = {false};
