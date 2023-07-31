@@ -249,34 +249,36 @@ void reGister(Arrays &arrays, Account &user, int &check) {
 }
 
 void multipleRegister(Arrays &arrays, int &count){
+    vector<Account> list;
     Account user;
     cout << "3. Multiple register\n\n";
     cout << "Enter '0' to exit multiple register\n";
     bool flag = true;
     int numAccount = 1, check = 1;
     while (flag) {
-        cout << "Account number " << numAccount << endl;
+        cout << "\nAccount number " << numAccount << endl;
         cout << "Enter your username: ";
         cin >> user.username;
         cout << "Enter your password: ";
         cin >> user.password;
-        if (checkRegister(arrays, user, check)){
-            count++;
-            signUpfile(user);
-            Insert(arrays.bitArray, user.username);
-            Insert(arrays.bitArrayPass[hashPassword(user.username)], user.password);
-            cout << "\n\n";
-        }
-        else {
-            failFile(user);
-            cout << "\n\n";
-        }
+        list.push_back(user);
         cout << "Your choice ('0' to exit): ";
         cin >> check;
         if (check == 0)
             flag =false;
         else    
             numAccount++;
+    }
+    for(unsigned int i = 0 ; i < list.size(); i++){
+        if (checkRegister(arrays, list[i], check)){
+            count++;
+            signUpfile(list[i]);
+            Insert(arrays.bitArray, list[i].username);
+            Insert(arrays.bitArrayPass[hashPassword(list[i].username)], list[i].password);
+        }
+        else {
+            failFile(list[i]);
+        }
     }
 }
 
