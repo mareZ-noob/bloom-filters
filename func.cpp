@@ -248,6 +248,38 @@ void reGister(Arrays &arrays, Account &user, int &check) {
     }
 }
 
+void multipleRegister(Arrays &arrays, int &count){
+    Account user;
+    cout << "3. Multiple register\n\n";
+    cout << "Enter '0' to exit multiple register\n";
+    bool flag = true;
+    int numAccount = 1, check = 1;
+    while (flag) {
+        cout << "Account number " << numAccount << endl;
+        cout << "Enter your username: ";
+        cin >> user.username;
+        cout << "Enter your password: ";
+        cin >> user.password;
+        if (checkRegister(arrays, user, check)){
+            count++;
+            signUpfile(user);
+            Insert(arrays.bitArray, user.username);
+            Insert(arrays.bitArrayPass[hashPassword(user.username)], user.password);
+            cout << "\n\n";
+        }
+        else {
+            failFile(user);
+            cout << "\n\n";
+        }
+        cout << "Your choice ('0' to exit): ";
+        cin >> check;
+        if (check == 0)
+            flag =false;
+        else    
+            numAccount++;
+    }
+}
+
 // Main menu
 void choice(Arrays &arrays) {
 
@@ -264,6 +296,7 @@ void choice(Arrays &arrays) {
     cout << "----------------------\n";
     cout << "1. Register\n";
     cout << "2. Login\n";
+    cout << "3. Multiple register\n";
     cout << "0. Exit\n\n";
     cout << "Your choice: ";
     cin >> ch;
@@ -298,7 +331,7 @@ void choice(Arrays &arrays) {
                 return;
             }
         }
-    } else {
+    } else if(ch == 2){
         cout << "2. Login\n\n";
         int check = 0;
         while (!isLogin(user, arrays, check)) {
@@ -328,5 +361,12 @@ void choice(Arrays &arrays) {
             cout << "\n----------------------\n";
             choice(arrays);
         }
+    }
+    else{
+        int count = 0;
+        multipleRegister(arrays, count);
+        cout << "you have successfully created " << count << " accounts!\n";
+        cout << "\n----------------------\n";
+        choice(arrays);
     }
 }
